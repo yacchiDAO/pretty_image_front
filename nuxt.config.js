@@ -46,5 +46,25 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+  },
+
+  server: {
+    port: 8000
+  },
+
+  modules: [
+    '@nuxtjs/bulma',
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
+  ],
+
+  axios: {
+    proxy: true
+  },
+
+  proxy: {
+    '/api/': {
+      target: 'https://pri-image-db.herokuapp.com',
+    }
   }
 }
