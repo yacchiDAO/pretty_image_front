@@ -66,5 +66,10 @@ export default {
     '/api/': {
       target: 'https://pri-image-db.herokuapp.com',
     }
+  },
+
+  loading: {
+    color: 'pink',
+    height: '5px'
   }
 }
