@@ -5,7 +5,7 @@
       <button v-on:click="searchImages()" class="button">検索</button>
     </div>
     <div class="columns is-multiline">
-      <div v-for="image in images" :key="image.id" class="column is-3">
+      <div v-for="image in images" :key="image.id" class="column is-4">
         <div v-on:click="active_modal=image.id" class="card">
           <div class="card-image">
             <figure class="image is-16by9">
@@ -20,7 +20,7 @@
                 </figure>
               </div>
               <div class="media-content">
-                <p class="title is-6">{{image.line}}</p>
+                <p class="title is-6">{{imageLine(image.line)}}</p>
                 <p class="subtitle is-6">{{image.characters.map(function (character) {return character.name}).join('/')}}</p>
               </div>
             </div>
@@ -56,14 +56,19 @@
     },
     methods: {
       searchImages: function() {
+        this.$nuxt.$loading.start();
         this.$axios.$get(`/api/images?q=${this.query}`)
           .then(json => {
             this.images = json
           })
           .catch(e => ({ error: e }))
+        this.$nuxt.$loading.finish();
       },
       activeModal: function(image_id) {
         return false;
+      },
+      imageLine: function(line) {
+        return(line == "" ? 'セリフなし' : line);
       }
     }
   }
