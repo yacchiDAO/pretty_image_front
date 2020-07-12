@@ -57,7 +57,6 @@
         images: [],
         active_modal: 0,
         page: 1,
-        content_max_num: 24,
         search_status: false
       }
     },
