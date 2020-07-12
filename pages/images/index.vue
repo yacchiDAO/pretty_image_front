@@ -24,12 +24,12 @@
                 <p class="subtitle is-6">{{image.characters.map(function (character) {return character.name}).join('/')}}</p>
               </div>
             </div>
-
             <div class="content">
               {{image.description}}
             </div>
           </div>
         </div>
+
         <div :id="'modal' + image.id" class="modal" v-bind:class="[active_modal === image.id ? 'is-active' : '' ]">
           <div class="modal-background" v-on:click="active_modal=0"></div>
           <div class="modal-content">
@@ -39,9 +39,13 @@
           </div>
           <button class="modal-close is-large" aria-label="close" v-on:click="active_modal=0"></button>
         </div>
-
       </div>
     </div>
+
+    <infinite-loading v-if="searchStatus()" ref="infiniteLoading" spinner="waveDots" @infinite="infiniteHandler">
+      <span slot="no-more"/>
+      <span slot="no-results"/>
+    </infinite-loading>
   </section>
 </template>
 
@@ -51,24 +55,48 @@
       return {
         query: "",
         images: [],
-        active_modal: 0
+        active_modal: 0,
+        page: 1,
+        content_max_num: 24,
+        search_status: false
       }
     },
     methods: {
       searchImages: function() {
-        this.$nuxt.$loading.start();
-        this.$axios.$get(`/api/images?q=${this.query}`)
-          .then(json => {
-            this.images = json
-          })
-          .catch(e => ({ error: e }))
-        this.$nuxt.$loading.finish();
-      },
-      activeModal: function(image_id) {
-        return false;
+        if(this.query != "") {
+          this.$nuxt.$loading.start();
+          this.page = 1;
+          this.$axios.$get(`/api/images?q=${this.query}`)
+            .then(json => {
+              this.images = json;
+              this.search_status = true;
+            })
+            .catch(e => ({ error: e }))
+          this.$nuxt.$loading.finish();
+          if(this.$refs.InfiniteLoading){
+            this.$refs.infiniteLoading.stateChanger.reset();
+          }
+        }
       },
       imageLine: function(line) {
         return(line == "" ? 'セリフなし' : line);
+      },
+      infiniteHandler: function($state) {
+        this.page += 1;
+        this.$axios.$get(`/api/images?q=${this.query}&page=${this.page}`)
+          .then(json => {
+            if(json.length > 0) {
+              this.images.push(...json);
+              $state.loaded();
+            } else {
+              $state.complete();
+              this.search_status = false;
+            }
+          })
+          .catch(e => ({ error: e }))
+      },
+      searchStatus: function() {
+        return this.search_status;
       }
     }
   }

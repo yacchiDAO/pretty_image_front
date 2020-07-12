@@ -30,6 +30,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    { src: '~/plugins/infiniteloading', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
