@@ -72,5 +72,9 @@ export default {
   loading: {
     color: 'pink',
     height: '5px'
+  },
+
+  generate: {
+    fallback: true
   }
 }
