@@ -65,7 +65,7 @@
         if(this.query != "") {
           this.$nuxt.$loading.start();
           this.page = 1;
-          this.$axios.$get(`/api/images?q=${this.query}`)
+          this.$axios.$get(`/api/images?q=${this.query}&page=${this.page}`)
             .then(json => {
               this.images = json;
               this.search_status = true;
