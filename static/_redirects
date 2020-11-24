@@ -1,2 +1,2 @@
-http://pri-image-db.netlify.app/api/*  http://pri-image-db.herokuapp.com/api/:splat  301!
-https://pri-image-db.netlify.app/api/*  https://pri-image-db.herokuapp.com/api/:splat  301!
+http://pri-image-db.netlify.app/api/* q=:q http://pri-image-db.herokuapp.com/api/:splat?q=:q  301!
+https://pri-image-db.netlify.app/api/* q=:q  https://pri-image-db.herokuapp.com/api/:splat?q=:q  301!
